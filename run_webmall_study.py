@@ -169,7 +169,7 @@ if __name__ == "__main__":  # necessary for dask backend
     parallel_backends = ["sequential", "ray"]
     study.run(
         n_jobs=n_jobs,
-        parallel_backend=parallel_backends[1],
+        parallel_backend=parallel_backends[0],
         strict_reproducibility=reproducibility_mode,
         n_relaunch=1,
     )
