@@ -7,7 +7,7 @@ repository.
 """
 import os
 import logging
-from dotenv import load_dotenv
+from dotenv import load_dotenv 
 import bgym
 
 from agentlab.agents.visualwebmall_agent.agent import WA_AGENT_4O
