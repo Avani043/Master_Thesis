@@ -148,9 +148,9 @@ def _get_git_info(module, changes_white_list=()) -> tuple[str, list[tuple[str, P
         git_hash = repo.head.object.hexsha
 
         modified_files = []
-
+        
         # Staged changes
-        staged_changes = repo.index.diff(repo.head.commit)
+        staged_changes = repo.index.diff(repo.head.commit) if git_hash else []
         for change in staged_changes:
             modified_files.append((change.change_type, Path(change.a_path)))
 
