@@ -92,6 +92,11 @@ AGENT_4om_AX = GenericAgentArgs(
     flags=FLAGS_AX,
 )
 
+AGENT_41m_AX = GenericAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-mini-2025-04-14"],
+    flags=FLAGS_AX,
+)
+
 AGENT_CLAUDE_AX = GenericAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["anthropic/claude-sonnet-4-20250514"],
     flags=FLAGS_AX,
@@ -134,7 +139,7 @@ load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 # choose your agent or provide a new agent
 #agent_args = [AGENT_41_AX]
-agent_args = [AGENT_4om_AX]
+agent_args = [AGENT_41m_AX]
 
 # ## select the benchmark to run on
 
