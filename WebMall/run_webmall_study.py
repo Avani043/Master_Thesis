@@ -178,6 +178,8 @@ if __name__ == "__main__":  # necessary for dask backend
         study = WebMallStudy(agent_args, benchmark, logging_level_stdout=logging.INFO, dir=study_dir, suffix="AX")
         
     parallel_backends = ["sequential", "ray"]
+
+
     study.run(
         n_jobs=n_jobs,
         parallel_backend=parallel_backends[0],
