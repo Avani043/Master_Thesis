@@ -17,6 +17,7 @@ from pathlib import Path
 from datetime import datetime
 from analyze_agentlab_results.aggregate_log_statistics import process_study_directory
 from analyze_agentlab_results.summarize_study import summarize_all_tasks_in_subdirs
+from unstructured.partition.html import partition_html
 
 
 logging.getLogger().setLevel(logging.DEBUG)
@@ -26,6 +27,29 @@ from agentlab.agents import dynamic_prompting as dp
 from agentlab.llm.llm_configs import CHAT_MODEL_ARGS_DICT
 
 from agentlab.agents.generic_agent.generic_agent import GenericAgent, GenericPromptFlags, GenericAgentArgs
+
+
+class HTMLPreprocessingAgent(GenericAgent):
+    def observe(self, observation):
+        # If HTML is included in observation, preprocess it
+        if "html" in observation and observation["html"]:
+            elements = partition_html(text=observation["html"])
+            cleaned_html = "\n".join(str(el) for el in elements)
+            observation["html"] = cleaned_html  # Replace with cleaned version
+
+        # Continue with normal observation handling
+        return super().observe(observation)
+
+class WrappedAgentArgs(GenericAgentArgs):
+    def make_agent(self):
+        # Create the base agent first
+        base_agent = super().make_agent()
+        # Wrap it with HTML preprocessing
+        return HTMLPreprocessingAgent(
+            chat_model_args=self.chat_model_args,
+            flags=self.flags,
+            max_retry=getattr(self, "max_retry", 3)  # default retry if not set
+        )
 
 FLAGS_default = GenericPromptFlags(
     obs=dp.ObsFlags(
@@ -112,6 +136,18 @@ AGENT_41m_AX = GenericAgentArgs(
     flags=FLAGS_AX,
 )
 
+#AGENT_41m_AX_UT = GenericAgentArgs(
+#    agent_type=HTMLPreprocessingAgent,
+#    chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-mini-2025-04-14"],
+#    flags=FLAGS_AX,
+#)
+
+AGENT_41m_AX_UT = WrappedAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-mini-2025-04-14"],
+    flags=FLAGS_AX,
+)
+
+
 AGENT_41m_V = GenericAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-mini-2025-04-14"],
     flags=FLAGS_V,
@@ -170,7 +206,7 @@ load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 # choose your agent or provide a new agent
 #agent_args = [AGENT_41_AX]
-agent_args = [AGENT_4om_AX_M]
+agent_args = [AGENT_41m_AX_UT]
 
 # ## select the benchmark to run on
 
