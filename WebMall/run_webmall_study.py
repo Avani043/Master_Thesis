@@ -18,6 +18,7 @@ from datetime import datetime
 from analyze_agentlab_results.aggregate_log_statistics import process_study_directory
 from analyze_agentlab_results.summarize_study import summarize_all_tasks_in_subdirs
 from unstructured.partition.html import partition_html
+from bs4 import BeautifulSoup
 
 
 logging.getLogger().setLevel(logging.DEBUG)
@@ -28,6 +29,32 @@ from agentlab.llm.llm_configs import CHAT_MODEL_ARGS_DICT
 
 from agentlab.agents.generic_agent.generic_agent import GenericAgent, GenericPromptFlags, GenericAgentArgs
 
+
+class UltraLightHTMLAgent(GenericAgent):
+    def observe(self, observation):
+        if "html" in observation and observation["html"]:
+            soup = BeautifulSoup(observation["html"], "html.parser")
+
+            # Extract only meaningful text and minimal structure
+            keep_tags = ["a", "button", "input", "title"]
+            for tag in soup.find_all(True):
+                if tag.name not in keep_tags:
+                    tag.unwrap()  # remove tag, keep text
+
+            # Get simplified text with minimal markup
+            cleaned_html = soup.get_text(" ", strip=True)
+            observation["html"] = cleaned_html[:5000]  # truncate if needed
+
+        return super().observe(observation)
+    
+class UltraLightAgentArgs(GenericAgentArgs):
+    def make_agent(self):
+        base_agent = super().make_agent()
+        return UltraLightHTMLAgent(
+            chat_model_args=self.chat_model_args,
+            flags=self.flags,
+            max_retry=getattr(self, "max_retry", 3),
+        )
 
 class HTMLPreprocessingAgent(GenericAgent):
     def observe(self, observation):
@@ -136,6 +163,8 @@ AGENT_41m_AX = GenericAgentArgs(
     flags=FLAGS_AX,
 )
 
+#tree cut agent
+
 #AGENT_41m_AX_UT = GenericAgentArgs(
 #    agent_type=HTMLPreprocessingAgent,
 #    chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-mini-2025-04-14"],
@@ -147,6 +176,10 @@ AGENT_41m_AX_UT = WrappedAgentArgs(
     flags=FLAGS_AX,
 )
 
+AGENT_41m_ULTRA = UltraLightAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-mini-2025-04-14"],
+    flags=FLAGS_AX,
+)
 
 AGENT_41m_V = GenericAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-mini-2025-04-14"],
@@ -206,7 +239,7 @@ load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 # choose your agent or provide a new agent
 #agent_args = [AGENT_41_AX]
-agent_args = [AGENT_41m_AX_UT]
+agent_args = [AGENT_41m_ULTRA]
 
 # ## select the benchmark to run on
 
