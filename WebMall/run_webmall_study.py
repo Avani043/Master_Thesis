@@ -53,7 +53,7 @@ class WrappedAgentArgs(GenericAgentArgs):
 
 FLAGS_default = GenericPromptFlags(
     obs=dp.ObsFlags(
-        use_html=False,
+        use_html=True,
         use_ax_tree=True,
         use_focused_element=True,
         use_error_logs=True,
