@@ -120,6 +120,9 @@ FLAGS_default = GenericPromptFlags(
 
 FLAGS_AX = FLAGS_default.copy()
 
+FLAGS_HT = FLAGS_default.copy()
+FLAGS_HT.obs.use_ax_tree = False
+
 FLAGS_V = FLAGS_default.copy()
 FLAGS_V.obs.use_screenshot = True
 FLAGS_V.obs.use_som = True
@@ -159,7 +162,7 @@ AGENT_4om_AX_M = GenericAgentArgs(
 )
 AGENT_4om_ULTRA = UltraLightAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-mini-2024-07-18"],
-    flags=FLAGS_AX,
+    flags=FLAGS_HT,
 )
 
 
@@ -184,7 +187,7 @@ AGENT_41m_AX_UT = WrappedAgentArgs(
 
 AGENT_41m_ULTRA = UltraLightAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4.1-mini-2025-04-14"],
-    flags=FLAGS_AX,
+    flags=FLAGS_HT,
 )
 
 AGENT_41m_V = GenericAgentArgs(
