@@ -253,7 +253,7 @@ load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 # choose your agent or provide a new agent
 #agent_args = [AGENT_41_AX]
-agent_args = [AGENT_41m_Wrap]
+agent_args = [AGENT_41_AX_M]
 
 # ## select the benchmark to run on
 
