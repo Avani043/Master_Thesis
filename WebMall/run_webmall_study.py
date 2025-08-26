@@ -164,6 +164,10 @@ AGENT_4om_ULTRA = UltraLightAgentArgs(
     chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-mini-2024-07-18"],
     flags=FLAGS_HT,
 )
+AGENT_4om_Wrap = WrappedAgentArgs(
+    chat_model_args=CHAT_MODEL_ARGS_DICT["openai/gpt-4o-mini-2024-07-18"],
+    flags=FLAGS_HT,
+)
 
 
 
@@ -253,7 +257,7 @@ load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 # choose your agent or provide a new agent
 #agent_args = [AGENT_41_AX]
-agent_args = [AGENT_41_AX_M]
+agent_args = [AGENT_4om_Wrap]
 
 # ## select the benchmark to run on
 
