@@ -361,7 +361,7 @@ import re
 import csv
 from collections import defaultdict
 
-STUDY_RESULTS_DIR = "/mnt/c/Avani/Master_Thesis_Webmall/WebMall/task_result/2025-07-22_13-21-09_genericagent-gpt-4-1-2025-04-14-on-webmall-basic-v0-7-ax"
+STUDY_RESULTS_DIR = "/mnt/c/Users/avani/OneDrive/Desktop/F1Score/HTML_TreeCut"
 
 
 def calculation_results(benchmark_solutions, model_solution):
