@@ -354,14 +354,14 @@ if __name__ == "__main__":
         print()
 '''
 
-from task_logs_extractor import summarize_single_task
+from .task_logs_extractor import summarize_single_task
 import os
 import json
 import re
 import csv
 from collections import defaultdict
 
-STUDY_RESULTS_DIR = "/mnt/c/Users/avani/OneDrive/Desktop/F1Score/HTML_TreeCut"
+STUDY_RESULTS_DIR = "../AgentLab/study_results"
 
 
 def calculation_results(benchmark_solutions, model_solution):

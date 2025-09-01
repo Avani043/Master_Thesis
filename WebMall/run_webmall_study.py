@@ -80,7 +80,7 @@ class WrappedAgentArgs(GenericAgentArgs):
 
 FLAGS_default = GenericPromptFlags(
     obs=dp.ObsFlags(
-        use_html=True,
+        use_html=False,
         use_ax_tree=True,
         use_focused_element=True,
         use_error_logs=True,
@@ -261,12 +261,12 @@ load_dotenv(PATH_TO_DOT_ENV_FILE)
 
 # choose your agent or provide a new agent
 #agent_args = [AGENT_41_AX]
-agent_args = [AGENT_41_V]
+agent_args = [AGENT_41_AX]
 
 # ## select the benchmark to run on
 
-#benchmark = "webmall_basic_v0.7"
-benchmark = "webmall_advanced_v0.7"
+benchmark = "webmall_basic_v0.7"
+#benchmark = "webmall_advanced_v0.7"
 
 # Set reproducibility_mode = True for reproducibility
 # this will "ask" agents to be deterministic. Also, it will prevent you from launching if you have
