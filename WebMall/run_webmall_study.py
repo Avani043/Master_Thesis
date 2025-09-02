@@ -34,16 +34,12 @@ class UltraLightHTMLAgent(GenericAgent):
     def observe(self, observation):
         if "html" in observation and observation["html"]:
             soup = BeautifulSoup(observation["html"], "html.parser")
-
-            # Extract only meaningful text and minimal structure
             keep_tags = ["a", "button", "input", "title"]
             for tag in soup.find_all(True):
                 if tag.name not in keep_tags:
-                    tag.unwrap()  # remove tag, keep text
-
-            # Get simplified text with minimal markup
+                    tag.unwrap() 
             cleaned_html = soup.get_text(" ", strip=True)
-            observation["html"] = cleaned_html[:5000]  # truncate if needed
+            observation["html"] = cleaned_html[:5000]  
 
         return super().observe(observation)
     
@@ -58,24 +54,22 @@ class UltraLightAgentArgs(GenericAgentArgs):
 
 class HTMLPreprocessingAgent(GenericAgent):
     def observe(self, observation):
-        # If HTML is included in observation, preprocess it
+        
         if "html" in observation and observation["html"]:
             elements = partition_html(text=observation["html"])
             cleaned_html = "\n".join(str(el) for el in elements)
-            observation["html"] = cleaned_html  # Replace with cleaned version
-
-        # Continue with normal observation handling
+            observation["html"] = cleaned_html  
         return super().observe(observation)
 
 class WrappedAgentArgs(GenericAgentArgs):
     def make_agent(self):
-        # Create the base agent first
+        
         base_agent = super().make_agent()
-        # Wrap it with HTML preprocessing
+        
         return HTMLPreprocessingAgent(
             chat_model_args=self.chat_model_args,
             flags=self.flags,
-            max_retry=getattr(self, "max_retry", 3)  # default retry if not set
+            max_retry=getattr(self, "max_retry", 3)  
         )
 
 FLAGS_default = GenericPromptFlags(
